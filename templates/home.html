@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Deepfake Detection</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #020646, #001f3f);
+            color: #ffffff;
+        }
+
+        /* ================= HERO IMAGE SECTION ================= */
+        .bg-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #bg_img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 10%;
+            left: 60%;
+            color: #f3fe0f;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .hero-content h3 {
+            font-size: 25px;
+            margin: 5px 0;
+        }
+
+        .hero-content h4 {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .scroll-btn {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            background: #f3fe0f;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* ================= PAGE STYLES ================= */
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #f3fe0f;
+        }
+
+        header p {
+            margin-top: 8px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #012a4a;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .upload-box {
+            text-align: center;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            margin-top: 15px;
+            color: white;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            background-color: #f3fe0f;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* 🔹 Uploaded Image Preview */
+        #previewImage {
+            display: none;
+            margin: 25px auto 0 auto;
+            max-width: 100%;
+            border-radius: 12px;
+            border: 3px solid #f3fe0f;
+            background: linear-gradient(135deg, #020646, #001f3f);
+            display: block;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #001f3f;
+            border-radius: 12px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Scroll to top */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: #f3fe0f;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= HERO IMAGE ================= -->
+    <section class="bg-container">
+        <img id="bg_img"
+            src="https://www.redsharknews.com/hs-fs/hubfs/Imported_Blog_Media/bd0f5d7ffbf5d31a86407d476d2078bd-1.jpg">
+
+        <div class="hero-content">
+            <h1>Deepfake Detection</h1>
+            <h3>AI-powered Image Verification</h3>
+            <h4>By Surekha Tammisetti, 24021DAI01</h4>
+        </div>
+
+        <button class="scroll-btn" onclick="scrollDown()">⬇ Upload Data</button>
+    </section>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div id="main-content"></div>
+
+    <header>
+        <h1>Deepfake Detection</h1>
+        <p>AI-generated & Face-swap Image Detection</p>
+        <p><i>Please upload cropped passport sized Face Images only</i></p>
+    </header>
+
+    <div class="container">
+        <div class="upload-box">
+            <h2>Upload an Image</h2>
+            <input type="file" id="imageInput" accept="image/*">
+            <br>
+            <button onclick="uploadImage()">Detect</button>
+        </div>
+
+        <img id="previewImage">
+        <div id="resultBox" class="result"></div>
+    </div>
+
+    <footer>
+        © 2026 · Deepfake Detection System
+    </footer>
+
+    <button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script>
+        function scrollDown() {
+            document.getElementById("main-content")
+                .scrollIntoView({ behavior: "smooth" });
+        }
+
+        function uploadImage() {
+            const input = document.getElementById("imageInput");
+            const resultBox = document.getElementById("resultBox");
+            const preview = document.getElementById("previewImage");
+
+            if (!input.files.length) {
+                alert("Please select an image first");
+                return;
+            }
+
+            preview.src = URL.createObjectURL(input.files[0]);
+            preview.style.display = "block";
+
+            const formData = new FormData();
+            formData.append("image", input.files[0]);
+
+            resultBox.style.display = "block";
+            resultBox.innerHTML = "⏳ Processing...";
+
+            fetch("/predict-image", { method: "POST", body: formData })
+                .then(async res => {
+                    const data = await res.json();
+
+                    /* 🔥 ONLY CHANGE IS HERE */
+                    if (!res.ok || data.error) {
+                        resultBox.innerHTML = `
+                            <h3 style="color:#ff4d4d;">
+                                ❌ No face detected. Please upload a clear face image.
+                            </h3>`;
+                        return;
+                    }
+
+                    resultBox.innerHTML = `
+                        <h3>🧠 Detection Result</h3>
+                        <b>Final Prediction:</b> ${data.label}<br><br>
+                        <b>AI-generated Probability:</b> ${data.ai_prob}<br>
+                        <b>Face-swap Probability:</b> ${data.face_prob}
+                    `;
+                })
+                .catch(() => {
+                    resultBox.innerHTML = `
+                        <h3 style="color:#ff4d4d;">
+                            ❌ No face detected. Please upload a clear face image.
+                        </h3>`;
+                });
+        }
+
+        const scrollBtn = document.getElementById("scrollTopBtn");
+        window.onscroll = () => {
+            scrollBtn.style.display = window.scrollY > 400 ? "block" : "none";
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,8 +1,22 @@
+# torch
+# torchvision
+# timm
+# transformers
+
+# opencv-python
+# numpy
+# Pillow
+# scikit-learn
+
+# facenet-pytorch
+
+# flask
+
 flask
-pandas
-numpy
-matplotlib
 torch
-timm
 torchvision
-tqdm
+timm
+opencv-python
+numpy
+Pillow
+retina-face
